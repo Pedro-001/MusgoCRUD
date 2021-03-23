@@ -1,8 +1,9 @@
  
-const Joi = require("@hapi/joi");
+const Joi = require('joi');
 
-const productIdSchema = Joi.string().regex(/^[0-9a-fA-F]{24}$/);
-const productTagSchema = Joi.array().items(Joi.string().max(10));
+
+const productIdSchema = Joi.object ({ productId: Joi.string().regex(/^[0-9a-fA-F]{24}$/)});
+const productTagSchema = Joi.object ({producTag: Joi.array().items(Joi.string().max(10))});
 
 const createProductSchema = Joi.object({
   name: Joi.string()
@@ -11,6 +12,9 @@ const createProductSchema = Joi.object({
   price: Joi.number()
     .min(1)
     .max(1000000),
+  qty:Joi.number()
+  .min(1)
+  .max(1000000),
   category: Joi.string()
     .max(50)
     .required(),
@@ -24,7 +28,7 @@ const createProductSchema = Joi.object({
     .max(500)
     .required(),
   description: Joi.string()
-    .max(50),
+    .max(500),
   image: Joi.string().required(),
   tags: productTagSchema
 });
@@ -36,6 +40,9 @@ const updateProductSchema = Joi.object({
   price: Joi.number()
     .min(1)
     .max(1000000),
+  qty:Joi.number()
+    .min(1)
+    .max(1000000),
   category: Joi.string()
     .max(50),
   type: Joi.string()
@@ -45,7 +52,7 @@ const updateProductSchema = Joi.object({
   temperament: Joi.string()
     .max(500),
   description: Joi.string()
-    .max(50),
+    .max(500),
   image: Joi.string(),
   tags: productTagSchema
 });

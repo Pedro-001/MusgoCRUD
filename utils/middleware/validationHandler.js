@@ -1,14 +1,15 @@
-const Joi = require("@hapi/joi");
+const Joi = require('joi');
 
 
 function validate (data, schema){
-    const { error } = Joi.object(schema).validate(data);
+    const  {error}  = schema.validate(data);
+    console.log(error)
     return error;
 }
 
 function validationHandler(schema, check = "body"){
     return function(req, res, next){
-        const errror=  validate(req[check], schema);
+        const error=  validate(req[check], schema);
         error ? next(new Error(error)) : next();
     };
 }
