@@ -55,7 +55,7 @@ router.post('/', validation(createProductSchema),async function(req,res,next){
     }
 });
 
-router.put('/:productId', validation({ productId: productIdSchema}, "params"), validation(updateProductSchema), async function(req,res,next){
+router.put('/:productId', validation(productIdSchema, "params"), validation(updateProductSchema), async function(req,res,next){
     const { productId } = req.params;
     const { body: product} = req;
     try {
