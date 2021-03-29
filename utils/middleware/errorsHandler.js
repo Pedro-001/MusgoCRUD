@@ -1,4 +1,6 @@
+const boom = require('@hapi/boom')
 const { config } =  require('../../config');
+const isRequestAjaxOrApi =  require('../../utils/isRequestAjaxOrApi')
 const Sentry = require("@sentry/node");
 
  Sentry.init({
@@ -6,16 +8,12 @@ const Sentry = require("@sentry/node");
     tracesSampleRate: 1.0,   
 })
   
-/* 
-Sentry.init({
-    dsn: "https://0d45ce1daead40f285eb14b354c86538@o552501.ingest.sentry.io/5678401",
-  
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
-  }); */
-  
+function  withErrorStack(err, stack) {
+    if (config.dev){
+        return {...err, stack} //object.assign({},err,stac k)
+    }
+    
+}
 
 function logErrors(err, req, res, next){
     Sentry.captureException(err);
@@ -23,9 +21,20 @@ function logErrors(err, req, res, next){
     next(err);
 }
 
+function wrapErrors(err, req, res, next) {
+    if(!err.isBoom){
+        next(boom.badImplementation(err));
+    }
+    next(err);
+}
+
 function clientErrorHandler(err, req, res, next){
-    if ( req.xhr) {
-        res.status(500).json({err : err.message});
+    const {
+        output: { statusCode, payload}
+    } = err;
+// Catch errors for AJAX reques or if an error ocurrs while streaming
+    if ( isRequestAjaxOrApi(req) || res.headerSent) {
+        res.status(statusCode).json(withErrorStack(payload, err.stack));
     } else{
         next(err)
     } 
@@ -33,14 +42,12 @@ function clientErrorHandler(err, req, res, next){
 
 function errorHandler(err, req, res, next){
     // Catch error while streaming
-    if(res.headerSent){
-        next(err);
-    }
-    if(!config.dev){
-        delete err.stack;
-    }
-    res.status(err.status || 500)
-    res.render("error",{error: err});
+    const {
+        output: { statusCode, payload}
+    } = err;
+
+    res.status(statusCode)
+    res.render("error",withErrorStack(payload, err.stack));
 }
 
 
@@ -48,6 +55,7 @@ function errorHandler(err, req, res, next){
 
 module.exports = {
     logErrors,
+    wrapErrors,
     clientErrorHandler,
     errorHandler
 }
