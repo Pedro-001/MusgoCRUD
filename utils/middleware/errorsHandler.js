@@ -43,7 +43,7 @@ function clientErrorHandler(err, req, res, next){
 function errorHandler(err, req, res, next){
     // Catch error while streaming
     const {
-        output: { statusCode, payload}
+        output: { statusCode, payload }
     } = err;
 
     res.status(statusCode)
