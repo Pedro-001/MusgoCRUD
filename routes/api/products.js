@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 const router = express.Router();
 const ProductsService =  require('../../services/products')
 const validation =  require('../../utils/middleware/validationHandler')
@@ -8,6 +9,9 @@ const { productIdSchema,
     createProductSchema, 
     updateProductSchema}  = require('../../utils/schemas/products');
 
+
+//JWT strategy
+require("../../utils/auth/strategies/jwt");
 
 const productService = new ProductsService();
 
@@ -41,7 +45,7 @@ router.get('/:productId',  async  function(req,res,next){
 });
 
 
-router.post('/', validation(createProductSchema),async function(req,res,next){
+router.post('/', validation(createProductSchema), async function(req,res,next){
     const { body: product } = req;
     try {
         const createdProduct =  await  productService.createProduct({ product })
@@ -51,11 +55,14 @@ router.post('/', validation(createProductSchema),async function(req,res,next){
         });
     } catch (error) {
         next(error)
-
     }
 });
 
-router.put('/:productId', validation(productIdSchema, "params"), validation(updateProductSchema), async function(req,res,next){
+router.put('/:productId',
+    passport.authenticate("jwt", {session:false}),
+    validation(productIdSchema, "params"),
+    validation(updateProductSchema),
+    async function(req,res,next){
     const { productId } = req.params;
     const { body: product} = req;
     try {
@@ -70,7 +77,9 @@ router.put('/:productId', validation(productIdSchema, "params"), validation(upda
     }
 });
 
-router.delete('/:productId', async function(req,res,next){
+router.delete('/:productId',
+    passport.authenticate("jwt", {session:false}),
+    async function(req,res,next){
     const { productId}  = req.params;
    try {
        const product =  await productService.deleteProduct({ productId });

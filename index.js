@@ -2,6 +2,7 @@
 const express =  require('express');
 const path = require('path');
 const boom = require('@hapi/boom')
+const debug = require('debug')("app:server");
 const productsRouter = require('./routes/views/products');
 const productsApiRouter = require('./routes/api/products');
 const authApiRouter = require('./routes/api/auth')
@@ -36,7 +37,7 @@ app.set("view engine", "pug");
 
 app.use('/products', productsRouter);
 app.use("/api/products", productsApiRouter);
-app.use("api/auth", authApiRouter );
+app.use("/api/auth", authApiRouter );
 
 /* redirect */
 app.get ('/', function(req, res) {
@@ -63,7 +64,7 @@ app.use(errorHandler);
 
 /* Server  */
 const server =  app.listen(8000, function(){
-    console.log(`listenin http://localhost:${server.address().port}`);
+    debug(`listenin http://localhost:${server.address().port}`);
 });
 
 

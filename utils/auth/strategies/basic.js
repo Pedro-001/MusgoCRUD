@@ -4,6 +4,7 @@ const boom = require('@hapi/boom');
 const bcrypt = require("bcrypt");
 const MongoLib = require("../../../lib/mongo");
 
+
 passport.use(
   new BasicStrategy(async function(username, password, cb) {
     const mongoDB = new MongoLib();
