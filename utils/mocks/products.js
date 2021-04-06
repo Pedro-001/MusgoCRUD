@@ -1,16 +1,61 @@
 
-const productsMocks = [
+const productsMock = [
     {
-        name: "Beta",
-        price: 1,
-        image: "https://scontent.fcvj2-1.fna.fbcdn.net/v/t1.0-9/121016574_1520951831430312_5326355402620757018_n.png?_nc_cat=101&ccb=1-3&_nc_sid=0debeb&_nc_ohc=K2nhTeUsNREAX84d1L3&_nc_oc=AQm1qWTeArmCbzONUrTxqSgl-w9KSdBjDrhc8l6phTxhm78H5lgcoQAMDRYAJi-Ujao&_nc_ht=scontent.fcvj2-1.fna&oh=260404dc6433511643448a73c2162596&oe=6066D11B"
+      name: "Betta Comun Macho",
+      price: "40",
+      category: "pez",
+      type: "Betta",
+      careLevel: "facil",
+      temperament: "Agresivo",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut ultrices magna, pulvinar semper justo. Sed tempor non felis ut dictum. Suspendisse id tellus vitae massa posuere blandit. Aliquam sollicitudin purus id convallis iaculis. Vestibulum turpis dolor, rutrum et tellus eget, tristique scelerisque odio. Phasellus id massa efficitur, vehicula massa eget, commodo risus. Maecenas laoreet nec dui in feugiat. Phasellus et turpis blandit, finibus nulla a, congue dui. Donec eget fringilla eu.",
+      image: "https://drive.google.com/file/d/1SYC7DbrMTDNbv7Jk7Oa7BqdiQQzOotAt/view?usp=sharing",
+      tags: ["facil","colores", "regular"]
     },
     {
-        name: "Sumatrano",
-        price: 2,
-        image:"https://scontent.fcvj2-1.fna.fbcdn.net/v/t1.0-9/121009008_1520951971430298_1482421899289695542_n.png?_nc_cat=103&ccb=1-3&_nc_sid=0debeb&_nc_ohc=2kVDYEh_RUoAX8sOYlw&_nc_ht=scontent.fcvj2-1.fna&oh=c200bfcf6fec7f338a94e9c5bf74b810&oe=6067A304"
+      name: "Sumatrano rojo",
+      price: "35",
+      category: "pez",
+      type: "barbo",
+      careLevel: "Medio",
+      temperament: "medio",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut ultrices magna, pulvinar semper justo. Sed tempor non felis ut dictum. Suspendisse id tellus vitae massa posuere blandit. Aliquam sollicitudin purus id convallis iaculis. Vestibulum turpis dolor, rutrum et tellus eget, tristique scelerisque odio. Phasellus id massa efficitur, vehicula massa eget, commodo risus. Maecenas laoreet nec dui in feugiat. Phasellus et turpis blandit, finibus nulla a, congue dui. Donec eget fringilla eu.",
+      image: "https://drive.google.com/file/d/18dJ8wgP2ISsAgYfqhNhrVDIN7qI3UGCm/view?usp=sharing",
+      tags: ["medio", "cardumen", "regular"]
+    },
+    {
+      name: "Terror verde adulto",
+      price: "200",
+      category: "pez",
+      type: "ciclido",
+      careLevel: "Medio",
+      temperament: "AltamenteAgresivo",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut ultrices magna, pulvinar semper justo. Sed tempor non felis ut dictum. Suspendisse id tellus vitae massa posuere blandit. Aliquam sollicitudin purus id convallis iaculis. Vestibulum turpis dolor, rutrum et tellus eget, tristique scelerisque odio. Phasellus id massa efficitur, vehicula massa eget, commodo risus. Maecenas laoreet nec dui in feugiat. Phasellus et turpis blandit, finibus nulla a, congue dui. Donec eget fringilla eu.",
+      image: "https://drive.google.com/file/d/1UqjN-Am7OSjn_BNW1P1Gm4I2Tf2LTgF9/view?usp=sharing",
+      tags: ["agresivo", "caro", "medio"]
     }
 ]
 
+function filteredProductsMock(tag) {
+  return productsMock.filter(product => product.tags.includes(tag));
+}
 
-module.exports =  productsMocks;
+class ProductsServiceMock {
+  async getProducts() {
+    return Promise.resolve(productsMock);
+  }
+
+  async createProduct() {
+    return Promise.resolve("6bedb1267d1ca7f3053e2875");
+  }
+}
+
+module.exports = {
+  productsMock,
+  filteredProductsMock,
+  ProductsServiceMock
+};
+
+
+
+
+ 
