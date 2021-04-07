@@ -12,6 +12,12 @@ const { productIdSchema,
     //JWT strategy
     require("../../utils/auth/strategies/jwt");
     
+    //Cache
+
+const cacheResponse = require('../../utils/cacheResponse')
+const { FIVE_MINUTES_IN_SECONDS, SIXTY_MINUTES_IN_SECONDS } = require("../../utils/time")
+
+
 function producstApi(app) {
     const router = express.Router();
     app.use("/api/products", router);
@@ -19,6 +25,7 @@ function producstApi(app) {
     const productService = new ProductsService();
     
     router.get('/', async function(req,res,next){
+        cacheResponse(res, FIVE_MINUTES_IN_SECONDS );
         try {
     //        throw new Error ('this is a error from api')
             const { tags} = req.query;
@@ -33,6 +40,7 @@ function producstApi(app) {
     })
     
     router.get('/:productId',  async  function(req,res,next){
+        cacheResponse(res, SIXTY_MINUTES_IN_SECONDS );
         const {productId} = req.params;
        try {
            const product =  await productService.getProduct({ productId })
